@@ -13,7 +13,7 @@ source:
 # since 2020, and conda-forge ships the same. Not unvendored to SuiteSparse colamd:
 # the bundled copy is the old COLAMD API and ABI compatibility is unverified.
 build:
-  number: 1
+  number: 0
   run_exports:
     - {{ pin_subpackage('lp_solve', max_pin='x.x') }}
 
