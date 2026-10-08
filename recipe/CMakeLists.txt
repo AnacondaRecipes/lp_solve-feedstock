@@ -118,6 +118,13 @@ if (HAVE_LIBDL)
   target_link_libraries (lpsolve55 PRIVATE dl)
 endif ()
 
+if (UNIX AND NOT APPLE)
+  # Bind intra-library refs (e.g. bundled BLAS idamax) to our own definitions.
+  # Otherwise MKL's Fortran-ABI idamax (loaded by numpy on linux-64) interposes
+  # and crashes solves (lpsolve passes int args by value; MKL expects pointers).
+  target_link_options (lpsolve55 PRIVATE "LINKER:-Bsymbolic")
+endif ()
+
 # Set version of library
 set_target_properties(lpsolve55 PROPERTIES VERSION ${LPSOLVE_VERSION}
                                            SOVERSION ${LPSOLVE_VERSION_MAJOR})
