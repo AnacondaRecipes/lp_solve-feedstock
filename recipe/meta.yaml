@@ -27,6 +27,8 @@ requirements:
 test:
   files:
     - test.lp
+  requires:
+    - binutils  # [linux]
   commands:
     - lp_solve -h
     - 'lp_solve -S3 test.lp | grep "objective function: 10"'  # [unix]
@@ -35,6 +37,8 @@ test:
     - test -f ${PREFIX}/lib/liblpsolve55${SHLIB_EXT}  # [unix]
     - if not exist %PREFIX%\\Library\\include\\lpsolve\\lp_lib.h exit 1  # [win]
     - if not exist %PREFIX%\\Library\\bin\\lpsolve55.dll exit 1  # [win]
+    # Guards the -Bsymbolic link flag (MKL idamax interposition crash without it)
+    - readelf -d ${PREFIX}/lib/liblpsolve55.so.5 | grep -q SYMBOLIC  # [linux]
 
 about:
   home: https://lpsolve.sourceforge.net/5.5
